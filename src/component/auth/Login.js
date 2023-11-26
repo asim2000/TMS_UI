@@ -8,14 +8,14 @@ import AuthService from '../../service/AuthService';
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(0);
+  const [isRememberMe, setIsRememberMe] = useState(false);
   const navigate = useNavigate()
   const handleLogin = () => {
    const authService = new AuthService()
    authService.login({
     username,
     password,
-    rememberMe
+    isRememberMe
    }).then(result=>{
     setJwt(result.data)
     navigate('/')
@@ -64,8 +64,8 @@ const Login = () => {
                 type="checkbox"
                 id="rememberMe"
                 label="Remember Me"
-                checked={rememberMe}
-                onChange={() => setRememberMe(!rememberMe)}
+                checked={isRememberMe}
+                onChange={() => setIsRememberMe(!isRememberMe)}
               />
               <Label for="rememberMe">Remember Me</Label>
             </FormGroup>

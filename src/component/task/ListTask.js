@@ -70,30 +70,31 @@ const ListTask = () => {
         
       taskService.getAll({
         userId:sub,
-        categoryId:categoryId,
-        priority:priority,
-        progress:progress
+        categoryId:(categoryId=='' || undefined?null:categoryId),
+        priority:(priority=='' || undefined?null:priority),
+        progress:(progress=='' || undefined?null:priority)
       })
       .then(result=>{
-        console.log(result)
           setTasks(result.data)
       }).catch(error=>{
         setTasks([])
           alertify.error(error.message)
       })
     }
-    const getRowColor = (progres) => {
-      if (true) {
-        return 'primary';
-      } else {
-        return 'default-background';
-      }
+    const clearFilter = () => {
+     setCategoryId('')
+     setPriority('')
+     setProgress('')
     };
+    const getBgColor = task => {
+      return task.progress=='CONFIRMED'?'lightgreen':''
+    }
   return (
   <Col>
      <Row>
     <Col>
     <Button className='mt-2 mb-2' onClick={()=>navigate('/task/create')}>Create Task</Button>
+
     </Col>
 
    </Row>
@@ -102,7 +103,7 @@ const ListTask = () => {
     <FormGroup>
             <Label for="category">Select Category</Label>
             <Input required type="select" name="categoryId" id="category" value={categoryId} onChange={event=>setCategoryId(event.target.value)}>
-                <option value="">Select...</option>
+                <option value=''>Select...</option>
                 {
                     categories.map(category=>{
                         return <option key={category.id} value={category.id}>{category.name}</option>
@@ -115,7 +116,7 @@ const ListTask = () => {
       <FormGroup>
             <Label for="priority">Select Priority</Label>
             <Input required type="select" name="priority" id="priority" value={priority} onChange={event=>setPriority(event.target.value)}>
-                <option value="">Select...</option>
+                <option value=''>Select...</option>
                 {
                     priorities?.map(priority=>{
                         return <option key={priority} value={priority}>{priority}</option>
@@ -128,7 +129,7 @@ const ListTask = () => {
       <FormGroup>
             <Label for="priority">Select Progress</Label>
             <Input required type="select" name="priority" id="priority" value={progress} onChange={event=>setProgress(event.target.value)}>
-                <option value="">Select...</option>
+                <option value=''>Select...</option>
                 {
                     progreses?.map(progress=>{
                         return <option key={progress} value={progress}>{progress}</option>
@@ -138,7 +139,8 @@ const ListTask = () => {
       </FormGroup>
     </Col>
     <Col>
-      <Button style={{marginTop:'30px',width:'200px'}} className='pr-5 pl-5' onClick={()=>getTasks()}>Search</Button>
+      <Button style={{marginTop:'30px',width:'150px'}} className='pr-5 pl-5' onClick={()=>getTasks()}>Search</Button>
+      <Button style={{marginTop:'30px',marginLeft:'5px'}} onClick={()=>clearFilter()}>Clear Filter</Button>
     </Col>
    </Row>
    <Row>
@@ -155,17 +157,17 @@ const ListTask = () => {
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody style={{ backgroundColor: '#f2f2f2', color: 'black' }}>
         {tasks.map((task, index) => (
-          <tr key={index}>
-            <th scope="row">{index + 1}</th>
-            <td>{task.category.name}</td>
-            <td>{task.title}</td>
-            <td>{task.description}</td>
-            <td>{task.priority}</td>
-            <td>{task.progress}</td>
-            <td>
-                <AiFillEdit title='edit' color='aqua' onClick={()=>navigate('/task/update/'+task.id)} className='ms-3' />
+          <tr key={index} style={{ backgroundColor: 'lightgreen' }}>
+            <th style={{ backgroundColor: getBgColor(task) }} scope="row">{index + 1}</th>
+            <td style={{ backgroundColor: getBgColor(task) }}>{task.category.name}</td>
+            <td style={{ backgroundColor: getBgColor(task) }}>{task.title}</td>
+            <td style={{ backgroundColor: getBgColor(task) }}>{task.description}</td>
+            <td style={{ backgroundColor: getBgColor(task) }}>{task.priority}</td>
+            <td style={{ backgroundColor: getBgColor(task) }}>{task.progress}</td>
+            <td style={{ backgroundColor: getBgColor(task) }}>
+                <AiFillEdit title='edit' color='black' onClick={()=>navigate('/task/update/'+task.id)} className='ms-3' />
                 <GiCancel color='red' title='cancel' onClick={() => handleDeleteClick(task.id)} className='ms-3' />
             </td>
           </tr>

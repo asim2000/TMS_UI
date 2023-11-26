@@ -17,18 +17,17 @@ export const makeRequest = (type, path, body) => {
 
 instance.interceptors.response.use(response => {
     if (response.data.code >=200 && response.data.code<300) {
-        console.log('true')
         return response.data
     } else {
-        console.log('false')
         return Promise.reject({ code: response.data.code, message: response.data.message })
     }
 }, error => {
+    console.log(error)
     if (error.code === 'ERR_NETWORK') {
         if (getJwt() == null) {
             window.location.href = '/login'
         } else {
-            window.location.href = '/notfound'
+            //window.location.href = '/notfound'
         }
     }
     return Promise.reject({ code: error.code, message: error.message })

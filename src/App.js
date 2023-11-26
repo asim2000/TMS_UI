@@ -15,6 +15,7 @@ import ListTask from './component/task/ListTask'
 import CreateTask from './component/task/CreateTask'
 import UpdateTask from './component/task/UpdateTask'
 import { isAuthenticated } from './utilities/jwt/isAuthenticate'
+import NotFound from './component/NotFound/NotFound'
 
 export default function App() {
   return (
@@ -37,7 +38,7 @@ export default function App() {
               <Route path="update/:id" Component={UpdateTask} />
             </Route>
             <Route path="/forgotPassword" Component={ForgotPassword} />
-
+            <Route path='/*' Component={NotFound}/>
     </Routes>
         </Row>
         <Row>
